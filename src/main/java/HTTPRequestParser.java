@@ -21,6 +21,9 @@ public class HTTPRequestParser {
                 return null;
             }
             String[] requestParts = requestLine.split(" ");
+            if (requestParts.length < 3) {
+                throw new HTTPParseException("Malformed request line: " + requestLine);
+            }
             String method = requestParts[0];
             String path = requestParts[1];
             String version = requestParts[2];

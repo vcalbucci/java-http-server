@@ -1,7 +1,5 @@
 package util;
 
-
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,11 +10,13 @@ public class IOUtils {
         int c;
         while ((c = in.read()) != -1) {
             if (c == '\r') {
+                in.read();
                 break;
             }
             sb.append((char) c);
         }
         return sb.toString();
     }
+    
 
 }
