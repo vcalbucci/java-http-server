@@ -22,6 +22,7 @@ public class EchoHandler implements HTTPHandler {
         if (CompressionUtils.acceptsGzip(request)) {
             try {
                 body = CompressionUtils.gzipCompress(body);
+                headers.put("Content-Encoding", "gzip");
             } catch (IOException e) {
                 return HTTPResponses.internalServerError(
                         request.getVersion(),

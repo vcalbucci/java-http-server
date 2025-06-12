@@ -6,15 +6,15 @@ public class HTTPResponse {
 
     String version;
     int statusCode;
-    String statusMessage;
+    String reasonPhrase;
     Map<String, String> headers;
     byte[] body;
 
-    public HTTPResponse(String version, int statusCode, String statusMessage,
+    public HTTPResponse(String version, int statusCode, String reasonPhrase,
             Map<String, String> headers, byte[] body) {
         this.version = version;
         this.statusCode = statusCode;
-        this.statusMessage = statusMessage;
+        this.reasonPhrase = reasonPhrase;
         this.headers = headers;
         this.body = body;
     }
@@ -27,12 +27,12 @@ public class HTTPResponse {
         return statusCode;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public String getReasonPhrase() {
+        return reasonPhrase;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public String getHeader(String name) {
+        return headers.get(name);
     }
 
     public byte[] getBody() {
