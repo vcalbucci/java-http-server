@@ -77,24 +77,20 @@ public class HandlersTest {
         assertEquals(ContentType.TEXT_PLAIN.getType(), response.getHeader("Content-Type"));
         assertEquals("gzip", response.getHeader("Content-Encoding"));
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0); // compressed body should not be empty
+        assertTrue(response.getBody().length > 0);
     }
 
     @Test
     public void testFileHandlerGET(@TempDir Path tempDir) throws IOException {
-        // Arrange → create test file
         Path testFile = tempDir.resolve("testfile.txt");
         String fileContent = "Hello, file!";
         Files.write(testFile, fileContent.getBytes(StandardCharsets.UTF_8));
 
-        // Create handler
         FileHandler handler = new FileHandler(tempDir.toString());
 
-        // Build request
         HTTPRequest request = new HTTPRequest("GET", "/testfile.txt", "HTTP/1.1", new byte[0], new HashMap<>());
         HTTPResponse response = handler.handle(request);
 
-        // Assert
         assertEquals(200, response.getStatusCode());
         assertEquals("OK", response.getReasonPhrase());
         assertEquals("application/octet-stream", response.getHeader("Content-Type"));
@@ -103,22 +99,17 @@ public class HandlersTest {
 
     @Test
     public void testFileHandlerPOST(@TempDir Path tempDir) {
-        // Arrange → content to write
         String fileContent = "POST body content";
         byte[] bodyBytes = fileContent.getBytes(StandardCharsets.UTF_8);
 
-        // Create handler
         FileHandler handler = new FileHandler(tempDir.toString());
 
-        // Build request
         HTTPRequest request = new HTTPRequest("POST", "/newfile.txt", "HTTP/1.1", bodyBytes, new HashMap<>());
         HTTPResponse response = handler.handle(request);
 
-        // Assert → 201 Created
         assertEquals(201, response.getStatusCode());
         assertEquals("Created", response.getReasonPhrase());
 
-        // Check that file was written correctly
         Path writtenFile = tempDir.resolve("newfile.txt");
         assertTrue(Files.exists(writtenFile));
         try {
