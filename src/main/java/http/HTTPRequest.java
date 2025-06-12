@@ -1,8 +1,9 @@
+package http;
 
 import java.util.HashMap;
 
 public class HTTPRequest {
-    
+
     private String method;
     private String path;
     private String version;
@@ -19,16 +20,20 @@ public class HTTPRequest {
 
     public String getMethod() {
         return method;
-    }   
+    }
+
     public String getPath() {
         return path;
     }
+
     public String getVersion() {
         return version;
     }
+
     public byte[] getBody() {
         return body;
     }
+
     public String getHeader(String name) {
         return headers.getOrDefault(name, null);
     }

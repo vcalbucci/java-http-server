@@ -5,6 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import exceptions.HTTPParseException;
+import http.HTTPRequest;
+import http.HTTPRequestParser;
 
 public class HTTPRequestParserTest {
 
