@@ -1,17 +1,17 @@
 package http;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class HTTPResponse {
 
     String version;
     int statusCode;
     String statusMessage;
-    HashMap<String, String> headers;
+    Map<String, String> headers;
     byte[] body;
 
     public HTTPResponse(String version, int statusCode, String statusMessage,
-            HashMap<String, String> headers, byte[] body) {
+            Map<String, String> headers, byte[] body) {
         this.version = version;
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
@@ -31,7 +31,7 @@ public class HTTPResponse {
         return statusMessage;
     }
 
-    public HashMap<String, String> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
