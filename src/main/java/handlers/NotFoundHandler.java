@@ -8,7 +8,7 @@ public class NotFoundHandler implements HTTPHandler {
 
     @Override
     public HTTPResponse handle(HTTPRequest request) {
-        return HTTPResponses.notFoundError(request);
+        return HTTPResponses.notFoundError(request.getVersion(), "404 Not Found");
     }
 
 }
