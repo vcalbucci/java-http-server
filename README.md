@@ -17,36 +17,64 @@ Designed for learning, experimentation, and extension — fully standards-compli
 ### Architecture Diagram
 
 ```mermaid
-graph TD
+flowchart TD
     SRC[src/]
     SRC --> MAINJAVA[main/java/]
-
     MAINJAVA --> EXCEPTIONS[exceptions/]
-    EXCEPTIONS --> HTTPParseException[HTTPParseException.java]
-
     MAINJAVA --> HANDLERS[handlers/]
+    MAINJAVA --> HTTP[http/]
+    MAINJAVA --> MAIN[main/]
+    MAINJAVA --> UTIL[util/]
+    
+    EXCEPTIONS --> HTTPParseException[HTTPParseException.java]
+    
     HANDLERS --> EchoHandler[EchoHandler.java]
     HANDLERS --> FileHandler[FileHandler.java]
     HANDLERS --> HTTPHandler[HTTPHandler.java]
     HANDLERS --> NotFoundHandler[NotFoundHandler.java]
     HANDLERS --> UserAgentHandler[UserAgentHandler.java]
-
-    MAINJAVA --> HTTP[http/]
+    
     HTTP --> ContentType[ContentType.java]
     HTTP --> HTTPRequest[HTTPRequest.java]
     HTTP --> HTTPRequestParser[HTTPRequestParser.java]
     HTTP --> HTTPResponse[HTTPResponse.java]
     HTTP --> HTTPResponses[HTTPResponses.java]
     HTTP --> Router[Router.java]
-
-    MAINJAVA --> MAIN[main/]
+    
     MAIN --> Main[Main.java]
-
-    MAINJAVA --> UTIL[util/]
+    
     UTIL --> CompressionUtils[CompressionUtils.java]
     UTIL --> FileUtils[FileUtils.java]
     UTIL --> IOUtils[IOUtils.java]
 ```
+
+```mermaid
+mindmap
+  root((src/))
+    main/java/
+      exceptions/
+        HTTPParseException.java
+      handlers/
+        EchoHandler.java
+        FileHandler.java
+        HTTPHandler.java
+        NotFoundHandler.java
+        UserAgentHandler.java
+      http/
+        ContentType.java
+        HTTPRequest.java
+        HTTPRequestParser.java
+        HTTPResponse.java
+        HTTPResponses.java
+        Router.java
+      main/
+        Main.java
+      util/
+        CompressionUtils.java
+        FileUtils.java
+        IOUtils.java
+```
+
 
 ### Supported HTTP methods:
 
