@@ -15,64 +15,24 @@ Designed for learning, experimentation, and extension — fully standards-compli
 - 🧪 **Comprehensive unit and integration test suite (JUnit 5)**
 
 ### Architecture Diagram
+```mindmap
+  root((src/)):::root
+    main/java/:::main
+      exceptions/:::folder
+      handlers/:::folder
+      http/:::folder
+      main/:::folder
+      util/:::folder
 
-```mermaid
-flowchart TD
-    SRC[src/]
-    SRC --> MAINJAVA[main/java/]
-    MAINJAVA --> EXCEPTIONS[exceptions/]
-    MAINJAVA --> HANDLERS[handlers/]
-    MAINJAVA --> HTTP[http/]
-    MAINJAVA --> MAIN[main/]
-    MAINJAVA --> UTIL[util/]
-    
-    EXCEPTIONS --> HTTPParseException[HTTPParseException.java]
-    
-    HANDLERS --> EchoHandler[EchoHandler.java]
-    HANDLERS --> FileHandler[FileHandler.java]
-    HANDLERS --> HTTPHandler[HTTPHandler.java]
-    HANDLERS --> NotFoundHandler[NotFoundHandler.java]
-    HANDLERS --> UserAgentHandler[UserAgentHandler.java]
-    
-    HTTP --> ContentType[ContentType.java]
-    HTTP --> HTTPRequest[HTTPRequest.java]
-    HTTP --> HTTPRequestParser[HTTPRequestParser.java]
-    HTTP --> HTTPResponse[HTTPResponse.java]
-    HTTP --> HTTPResponses[HTTPResponses.java]
-    HTTP --> Router[Router.java]
-    
-    MAIN --> Main[Main.java]
-    
-    UTIL --> CompressionUtils[CompressionUtils.java]
-    UTIL --> FileUtils[FileUtils.java]
-    UTIL --> IOUtils[IOUtils.java]
-```
+%% Custom styles
+classDef root fill:#e5ffe5,stroke:#222,stroke-width:3px,font-size:20px,font-weight:bold;
+classDef main fill:#f2f2ff,stroke:#4a4aaf,stroke-width:2px,font-size:17px,font-weight:bold;
+classDef folder fill:#f9f9f9,stroke:#333,stroke-width:2px,font-size:15px,font-weight:bold;
 
-```mermaid
-mindmap
-  root((src/))
-    main/java/
-      exceptions/
-        HTTPParseException.java
-      handlers/
-        EchoHandler.java
-        FileHandler.java
-        HTTPHandler.java
-        NotFoundHandler.java
-        UserAgentHandler.java
-      http/
-        ContentType.java
-        HTTPRequest.java
-        HTTPRequestParser.java
-        HTTPResponse.java
-        HTTPResponses.java
-        Router.java
-      main/
-        Main.java
-      util/
-        CompressionUtils.java
-        FileUtils.java
-        IOUtils.java
+%% Assign styles
+class root root;
+class "main/java/" main;
+class exceptions,handlers,http,main,util folder;
 ```
 
 
