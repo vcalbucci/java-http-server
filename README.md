@@ -14,12 +14,46 @@ Designed for learning, experimentation, and extension — fully standards-compli
 - 🐾 **Basic User-Agent handler**
 - 🧪 **Comprehensive unit and integration test suite (JUnit 5)**
 
+### Architecture Diagram
+
+```mermaid
+graph TD
+    SRC[src/]
+    SRC --> MAINJAVA[main/java/]
+
+    MAINJAVA --> EXCEPTIONS[exceptions/]
+    EXCEPTIONS --> HTTPParseException[HTTPParseException.java]
+
+    MAINJAVA --> HANDLERS[handlers/]
+    HANDLERS --> EchoHandler[EchoHandler.java]
+    HANDLERS --> FileHandler[FileHandler.java]
+    HANDLERS --> HTTPHandler[HTTPHandler.java]
+    HANDLERS --> NotFoundHandler[NotFoundHandler.java]
+    HANDLERS --> UserAgentHandler[UserAgentHandler.java]
+
+    MAINJAVA --> HTTP[http/]
+    HTTP --> ContentType[ContentType.java]
+    HTTP --> HTTPRequest[HTTPRequest.java]
+    HTTP --> HTTPRequestParser[HTTPRequestParser.java]
+    HTTP --> HTTPResponse[HTTPResponse.java]
+    HTTP --> HTTPResponses[HTTPResponses.java]
+    HTTP --> Router[Router.java]
+
+    MAINJAVA --> MAIN[main/]
+    MAIN --> Main[Main.java]
+
+    MAINJAVA --> UTIL[util/]
+    UTIL --> CompressionUtils[CompressionUtils.java]
+    UTIL --> FileUtils[FileUtils.java]
+    UTIL --> IOUtils[IOUtils.java]
+```
+
 ### Supported HTTP methods:
 
-- `GET`  
-- `POST`  
-- `HEAD`  
-- `DELETE`  
+- `GET`
+- `POST`
+- `HEAD`
+- `DELETE`
 - `OPTIONS`
 
 ### Standards:
@@ -33,7 +67,7 @@ Designed for learning, experimentation, and extension — fully standards-compli
 
 ### Prerequisites
 
-- Java 17+ recommended  
+- Java 17+ recommended
 - Maven 3.6+ installed
 
 ### Build the project
