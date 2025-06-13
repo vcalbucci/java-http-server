@@ -45,7 +45,7 @@ public class HTTPResponses {
         byte[] body = message.getBytes(StandardCharsets.UTF_8);
 
         HashMap<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/plain");
+        headers.put("Content-Type", ContentType.TEXT_PLAIN.getType());
         headers.put("Content-Length", String.valueOf(body.length));
 
         return new HTTPResponse(
@@ -60,7 +60,7 @@ public class HTTPResponses {
         byte[] body = message.getBytes(StandardCharsets.UTF_8);
 
         HashMap<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "text/plain");
+        headers.put("Content-Type", ContentType.TEXT_PLAIN.getType());
         headers.put("Content-Length", String.valueOf(body.length));
 
         return new HTTPResponse(

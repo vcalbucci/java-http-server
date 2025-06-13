@@ -49,7 +49,6 @@ public class MainIntegrationTest {
             assertNotNull(statusLine);
             assertTrue(statusLine.contains("404"));
         }
-        System.out.println("1");
     }
 
     @Test
@@ -75,7 +74,6 @@ public class MainIntegrationTest {
             String body = new String(bodyChars, 0, charsRead);
             assertTrue(body.contains("MyTestAgent"));
         }
-        System.out.println("2");
     }
 
     @Test
@@ -107,7 +105,6 @@ public class MainIntegrationTest {
             String body = new String(bodyChars, 0, charsRead);
             assertEquals("test-message", body);
         }
-        System.out.println("3");
     }
 
     @Test
@@ -174,7 +171,6 @@ public class MainIntegrationTest {
             }
 
         }
-        System.out.println("4");
     }
 
     @Test
@@ -199,7 +195,6 @@ public class MainIntegrationTest {
             assertNotNull(statusLine);
             assertTrue(statusLine.contains("201"));
         }
-        System.out.println("5");
 
         try (Socket socket = new Socket("localhost", 1212)) {
             OutputStream out = socket.getOutputStream();
@@ -221,7 +216,6 @@ public class MainIntegrationTest {
             String body = new String(bodyChars, 0, charsRead);
             assertEquals(fileContent, body);
         }
-        System.out.println("6");
 
     }
 
@@ -251,6 +245,70 @@ public class MainIntegrationTest {
             assertTrue(sawContentLength);
             assertEquals(-1, in.read());
         }
+    }
+
+    @Test
+    @Order(7)
+    public void testFileHandlerPUT(@TempDir Path tempDir) throws IOException {
+        String filename = "testputfile.txt";
+        String initialContent = "Initial PUT content";
+        String updatedContent = "Updated PUT content";
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            String request = String.format(
+                    "PUT /files/%s HTTP/1.1\r\nHost: localhost\r\nContent-Length: %d\r\n\r\n%s",
+                    filename, initialContent.length(), initialContent);
+
+            out.write(request.getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("201") || statusLine.contains("200"));
+        }
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            String request = String.format(
+                    "PUT /files/%s HTTP/1.1\r\nHost: localhost\r\nContent-Length: %d\r\n\r\n%s",
+                    filename, updatedContent.length(), updatedContent);
+
+            out.write(request.getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("200") || statusLine.contains("201"));
+        }
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write(("GET /files/" + filename + " HTTP/1.1\r\nHost: localhost\r\n\r\n").getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("200"));
+
+            while (!reader.readLine().isEmpty()) {
+            }
+
+            char[] bodyChars = new char[200];
+            int charsRead = reader.read(bodyChars);
+            String body = new String(bodyChars, 0, charsRead);
+            assertEquals(updatedContent, body);
+        }
+
     }
 
 }

@@ -71,6 +71,21 @@ public class FileHandler implements HTTPHandler {
                 FileUtils.createFile(file.getPath(), request.getBody());
                 return HTTPResponses.created(request.getVersion(), "File created: " + file.getPath());
             } else {
+                if (request.getMethod().equals("PUT")) {
+                    try {
+                        Files.write(path, request.getBody());
+                        return new HTTPResponse(
+                                request.getVersion(),
+                                200,
+                                "OK",
+                                headers,
+                                ("File updated: " + file.getPath()).getBytes());
+                    } catch (IOException e) {
+                        return HTTPResponses.internalServerError(
+                                request.getVersion(),
+                                "Failed to write file: " + e.getMessage());
+                    }
+                }
                 return HTTPResponses.conflictError(
                         request.getVersion(),
                         "File already exists: " + file.getPath());
