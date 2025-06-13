@@ -386,12 +386,10 @@ public class MainIntegrationTest {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            // Check status line
             String statusLine = reader.readLine();
             assertNotNull(statusLine);
             assertTrue(statusLine.contains("204"), "Expected 204 No Content");
 
-            // Check headers
             boolean sawAllowHeader = false;
             String allowValue = "";
             String line;
@@ -404,17 +402,14 @@ public class MainIntegrationTest {
 
             assertTrue(sawAllowHeader, "Expected Allow header in response");
 
-            // The server must always allow OPTIONS itself
             assertTrue(allowValue.contains("OPTIONS"));
 
-            // The server must allow at least GET and POST and DELETE (you can customize
-            // this check)
+
             assertTrue(allowValue.contains("GET"));
             assertTrue(allowValue.contains("POST"));
             assertTrue(allowValue.contains("DELETE"));
             assertTrue(allowValue.contains("HEAD"));
 
-            // There must be no body
             assertEquals(-1, in.read(), "Expected no body for 204 No Content");
         }
 
