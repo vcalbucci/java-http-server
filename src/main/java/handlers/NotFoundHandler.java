@@ -4,6 +4,9 @@ import http.HTTPRequest;
 import http.HTTPResponse;
 import http.HTTPResponses;
 
+/**
+ * Handler for 404 Not Found responses.
+ */
 public class NotFoundHandler implements HTTPHandler {
 
     @Override

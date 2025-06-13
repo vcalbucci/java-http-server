@@ -7,6 +7,11 @@ import java.util.HashMap;
 import exceptions.HTTPParseException;
 import util.IOUtils;
 
+/**
+ * Parses an HTTP request from an InputStream.
+ * Provides the parsed request as an HTTPRequest object for further processing.
+ * Supports parsing of request line, headers, and body.
+ */
 public class HTTPRequestParser {
 
     private InputStream in;

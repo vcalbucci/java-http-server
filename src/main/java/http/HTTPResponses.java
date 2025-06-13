@@ -3,6 +3,11 @@ package http;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+/**
+ * Provides static helper methods for generating common HTTP responses.
+ * Simplifies the construction of standard error and success responses.
+ * Used by handlers to avoid duplicating response construction logic.
+ */
 public class HTTPResponses {
 
     public static HTTPResponse internalServerError(String version, String message) {

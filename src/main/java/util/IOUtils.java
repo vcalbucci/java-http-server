@@ -3,6 +3,9 @@ package util;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Utility class for reading lines from an InputStream.
+ */
 public class IOUtils {
 
     public static String readLine(InputStream in) throws IOException {

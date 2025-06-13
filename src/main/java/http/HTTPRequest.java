@@ -2,6 +2,11 @@ package http;
 
 import java.util.HashMap;
 
+/**
+ * Represents an HTTP request parsed from an incoming connection.
+ * Stores method, path, version, headers, and body of the request.
+ * Used by handlers and routing logic to process incoming requests.
+ */
 public class HTTPRequest {
 
     private String method;

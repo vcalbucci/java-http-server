@@ -8,6 +8,9 @@ import java.util.zip.GZIPOutputStream;
 
 import http.HTTPRequest;
 
+/**
+ * Utility class for handling compression-related tasks.
+ */
 public class CompressionUtils {
 
     public static byte[] gzipCompress(byte[] data) throws IOException {

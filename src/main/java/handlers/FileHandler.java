@@ -13,6 +13,12 @@ import http.HTTPResponses;
 import util.CompressionUtils;
 import util.FileUtils;
 
+/**
+ * FileHandler is an HTTP handler that serves files from a specified base
+ * directory.
+ * It supports both GET and POST methods and compresses responses using gzip if
+ * the client accepts it.
+ */
 public class FileHandler implements HTTPHandler {
 
     private final String baseDirectory;
@@ -25,7 +31,13 @@ public class FileHandler implements HTTPHandler {
     public HTTPResponse handle(HTTPRequest request) {
 
         HashMap<String, String> headers = new HashMap<>();
-        File file = new File(baseDirectory, request.getPath());
+        String relativePath = request.getPath().startsWith("/files/")
+                ? request.getPath().substring("/files/".length())
+                : request.getPath();
+        if (relativePath.startsWith("/")) {
+            relativePath = relativePath.substring(1);
+        }
+        File file = new File(baseDirectory, relativePath);
         Path path = Paths.get(file.getAbsolutePath());
 
         if (request.getMethod().equals("GET")) {
@@ -46,7 +58,7 @@ public class FileHandler implements HTTPHandler {
                             headers,
                             data);
                 } else {
-                    return HTTPResponses.notFoundError(request.getVersion(), 
+                    return HTTPResponses.notFoundError(request.getVersion(),
                             "File not found: " + file.getPath());
                 }
             } catch (IOException e) {

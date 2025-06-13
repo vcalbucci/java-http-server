@@ -1,5 +1,8 @@
 package http;
 
+/**
+ * Represents common HTTP Content-Type values used in responses.
+ */
 public enum ContentType {
     TEXT_CSS("text/css"),
     IMAGE_GIF("image/gif"),

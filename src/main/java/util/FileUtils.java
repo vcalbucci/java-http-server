@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.io.IOException;
 
+/**
+ * Utility class for file operations.
+ */
 public class FileUtils {
 
     public static void createFile(String path, byte[] content) {

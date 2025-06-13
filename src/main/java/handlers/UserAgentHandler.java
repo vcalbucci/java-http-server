@@ -6,6 +6,10 @@ import java.util.Map;
 import http.HTTPRequest;
 import http.HTTPResponse;
 
+/**
+ * Handler that processes incoming HTTP requests and extracts the User-Agent header.
+ * Returns a response containing the User-Agent information.
+ */
 public class UserAgentHandler implements HTTPHandler {
 
     @Override

@@ -10,6 +10,11 @@ import http.HTTPResponse;
 import http.HTTPResponses;
 import util.CompressionUtils;
 
+/**
+ * EchoHandler is a simple HTTP handler that echoes back the path of the request.
+ * It supports gzip compression if the client accepts it.
+ * The response includes the path as the body and appropriate headers.
+ */
 public class EchoHandler implements HTTPHandler {
 
     @Override
