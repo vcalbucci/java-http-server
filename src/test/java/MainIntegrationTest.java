@@ -123,25 +123,26 @@ public class MainIntegrationTest {
 
             ByteArrayOutputStream responseBuffer = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
-            
+
             while (true) {
                 int bytesRead = in.read(buffer);
-                if (bytesRead == -1) break;
+                if (bytesRead == -1)
+                    break;
                 responseBuffer.write(buffer, 0, bytesRead);
-                
+
                 byte[] responseBytes = responseBuffer.toByteArray();
                 String responseStr = new String(responseBytes, StandardCharsets.UTF_8);
                 int headerEndIndex = responseStr.indexOf("\r\n\r\n");
-                
+
                 if (headerEndIndex != -1) {
                     String headers = responseStr.substring(0, headerEndIndex);
                     String[] headerLines = headers.split("\r\n");
-                    
+
                     boolean sawGzipHeader = false;
                     int contentLength = 0;
-                    
+
                     assertTrue(headerLines[0].contains("200"));
-                    
+
                     for (String line : headerLines) {
                         if (line.toLowerCase().startsWith("content-encoding: gzip")) {
                             sawGzipHeader = true;
@@ -150,20 +151,21 @@ public class MainIntegrationTest {
                             contentLength = Integer.parseInt(line.substring("content-length:".length()).trim());
                         }
                     }
-                    
+
                     assertTrue(sawGzipHeader);
                     assertTrue(contentLength > 0, "Content-Length should be set");
-                    
+
                     int headerLength = headerEndIndex + 4;
                     int bodyBytesAlreadyRead = responseBytes.length - headerLength;
-                    
+
                     while (bodyBytesAlreadyRead < contentLength) {
                         int bytesRead2 = in.read(buffer);
-                        if (bytesRead2 == -1) break;
+                        if (bytesRead2 == -1)
+                            break;
                         responseBuffer.write(buffer, 0, bytesRead2);
                         bodyBytesAlreadyRead += bytesRead2;
                     }
-                    
+
                     byte[] finalResponse = responseBuffer.toByteArray();
                     int actualBodyLength = finalResponse.length - headerLength;
                     assertEquals(contentLength, actualBodyLength, "Expected to read full body");
@@ -178,7 +180,7 @@ public class MainIntegrationTest {
     @Test
     @Order(5)
     public void testFileHandlerPOSTAndGET() throws IOException {
-        String filename =   "testfile.txt";
+        String filename = "testfile.txt";
         String fileContent = "Hello from POST body!";
 
         try (Socket socket = new Socket("localhost", 1212)) {
@@ -222,4 +224,33 @@ public class MainIntegrationTest {
         System.out.println("6");
 
     }
+
+    @Test
+    @Order(6)
+    public void testHeadRequest() throws IOException {
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write("HEAD /echo/test-head HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n".getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("200"));
+
+            boolean sawContentLength = false;
+            String line;
+            while ((line = reader.readLine()) != null && !line.isEmpty()) {
+                if (line.toLowerCase().startsWith("content-length:")) {
+                    sawContentLength = true;
+                }
+            }
+
+            assertTrue(sawContentLength);
+            assertEquals(-1, in.read());
+        }
+    }
+
 }

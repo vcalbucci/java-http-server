@@ -33,8 +33,10 @@ public class Main {
         Router router = new Router();
         router.addRoute("GET", "/user-agent", new UserAgentHandler());
         router.addRoute("GET", "/echo/", new EchoHandler());
-        router.addRoute("POST", "/files/", new FileHandler(fileBaseDir));
         router.addRoute("GET", "/files/", new FileHandler(fileBaseDir));
+        router.addRoute("POST", "/files/", new FileHandler(fileBaseDir));
+        router.addRoute("HEAD", "/echo/", new EchoHandler());
+        router.addRoute("HEAD", "/files/", new FileHandler(fileBaseDir));
 
         ExecutorService pool = Executors.newFixedThreadPool(20);
 
@@ -91,7 +93,7 @@ public class Main {
 
                 HTTPResponse response = router.route(request).handle(request);
 
-                writeResponse(out, response);
+                writeResponse(out, response, request.getMethod());
 
                 String connectionHeader = request.getHeader("Connection");
                 if (connectionHeader != null && connectionHeader.equalsIgnoreCase("close")) {
@@ -109,7 +111,7 @@ public class Main {
         }
     }
 
-    private static void writeResponse(OutputStream out, HTTPResponse response) throws IOException {
+    private static void writeResponse(OutputStream out, HTTPResponse response, String method) throws IOException {
         out.write((response.getVersion() + " " + response.getStatusCode() + " " + response.getReasonPhrase() + "\r\n")
                 .getBytes(StandardCharsets.UTF_8));
 
@@ -123,7 +125,7 @@ public class Main {
 
         out.write("\r\n".getBytes(StandardCharsets.UTF_8));
 
-        if (response.getBody() != null && response.getBody().length > 0) {
+        if (response.getBody() != null && response.getBody().length > 0 && !method.equals("HEAD")) {
             out.write(response.getBody());
         }
 
