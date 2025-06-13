@@ -43,6 +43,8 @@ public class Main {
 
         router.addRoute("DELETE", "/files/", new FileHandler(fileBaseDir));
 
+        router.addRoute("OPTIONS", "/files/", new FileHandler(fileBaseDir));
+
 
         ExecutorService pool = Executors.newFixedThreadPool(20);
 

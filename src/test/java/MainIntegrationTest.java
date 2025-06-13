@@ -374,4 +374,51 @@ public class MainIntegrationTest {
         }
     }
 
+    @Test
+    @Order(9)
+    public void testOPTIONS() throws IOException {
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write("OPTIONS /files/anything.txt HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n".getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            // Check status line
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("204"), "Expected 204 No Content");
+
+            // Check headers
+            boolean sawAllowHeader = false;
+            String allowValue = "";
+            String line;
+            while ((line = reader.readLine()) != null && !line.isEmpty()) {
+                if (line.toLowerCase().startsWith("allow:")) {
+                    sawAllowHeader = true;
+                    allowValue = line.substring("Allow:".length()).trim();
+                }
+            }
+
+            assertTrue(sawAllowHeader, "Expected Allow header in response");
+
+            // The server must always allow OPTIONS itself
+            assertTrue(allowValue.contains("OPTIONS"));
+
+            // The server must allow at least GET and POST and DELETE (you can customize
+            // this check)
+            assertTrue(allowValue.contains("GET"));
+            assertTrue(allowValue.contains("POST"));
+            assertTrue(allowValue.contains("DELETE"));
+            assertTrue(allowValue.contains("HEAD"));
+
+            // There must be no body
+            assertEquals(-1, in.read(), "Expected no body for 204 No Content");
+        }
+
+        System.out.println("OPTIONS test done");
+    }
+
 }

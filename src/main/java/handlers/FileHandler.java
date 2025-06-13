@@ -51,6 +51,8 @@ public class FileHandler implements HTTPHandler {
                 return handlePUT(request, file, path);
             case "DELETE":
                 return handleDELETE(request, file, path);
+            case "OPTIONS":
+                return handleOPTIONS(request);
             default:
                 return HTTPResponses.notFoundError(request.getVersion(),
                         "Unsupported method: " + request.getMethod());
@@ -137,5 +139,17 @@ public class FileHandler implements HTTPHandler {
             return HTTPResponses.notFoundError(request.getVersion(),
                     "File not found: " + file.getPath());
         }
+    }
+
+    private HTTPResponse handleOPTIONS(HTTPRequest request) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Allow", "GET, POST, PUT, DELETE, HEAD, OPTIONS");
+        
+        return new HTTPResponse(
+                request.getVersion(),
+                204,
+                "No Content",
+                headers,
+                new byte[0]);
     }
 }
