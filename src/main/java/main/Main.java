@@ -34,12 +34,15 @@ public class Main {
         router.addRoute("GET", "/user-agent", new UserAgentHandler());
         router.addRoute("GET", "/echo/", new EchoHandler());
         router.addRoute("GET", "/files/", new FileHandler(fileBaseDir));
-        
+
         router.addRoute("POST", "/files/", new FileHandler(fileBaseDir));
         router.addRoute("PUT", "/files/", new FileHandler(fileBaseDir));
 
         router.addRoute("HEAD", "/echo/", new EchoHandler());
         router.addRoute("HEAD", "/files/", new FileHandler(fileBaseDir));
+
+        router.addRoute("DELETE", "/files/", new FileHandler(fileBaseDir));
+
 
         ExecutorService pool = Executors.newFixedThreadPool(20);
 

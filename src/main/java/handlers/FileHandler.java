@@ -16,7 +16,7 @@ import util.FileUtils;
 /**
  * FileHandler is an HTTP handler that serves files from a specified base
  * directory.
- * It supports both GET and POST methods and compresses responses using gzip if
+ * It supports both GET, POST, PUT, and DELETE methods and compresses responses using gzip if
  * the client accepts it.
  */
 public class FileHandler implements HTTPHandler {
@@ -66,7 +66,7 @@ public class FileHandler implements HTTPHandler {
                         request.getVersion(),
                         "Failed to read file: " + e.getMessage());
             }
-        } else {
+        } else if (request.getMethod().equals("POST") || request.getMethod().equals("PUT")) {
             if (!file.exists()) {
                 FileUtils.createFile(file.getPath(), request.getBody());
                 return HTTPResponses.created(request.getVersion(), "File created: " + file.getPath());
@@ -91,6 +91,25 @@ public class FileHandler implements HTTPHandler {
                         "File already exists: " + file.getPath());
             }
 
+        } else { // DELETE
+            if (file.exists() && file.isFile()) {
+                try {
+                    Files.delete(path);
+                    return new HTTPResponse(
+                            request.getVersion(),
+                            200,
+                            "OK",
+                            headers,
+                            ("File deleted: " + file.getPath()).getBytes());
+                } catch (IOException e) {
+                    return HTTPResponses.internalServerError(
+                            request.getVersion(),
+                            "Failed to delete file: " + e.getMessage());
+                }
+            } else {
+                return HTTPResponses.notFoundError(request.getVersion(),
+                        "File not found: " + file.getPath());
+            }
         }
     }
 

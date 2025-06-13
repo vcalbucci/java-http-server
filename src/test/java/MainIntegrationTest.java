@@ -311,4 +311,67 @@ public class MainIntegrationTest {
 
     }
 
+    @Test
+    @Order(8)
+    public void testFileHandlerDELETE(@TempDir Path tempDir) throws IOException {
+        String filename = "testdeletefile.txt";
+        String fileContent = "File to be deleted";
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            String request = String.format(
+                    "PUT /files/%s HTTP/1.1\r\nHost: localhost\r\nContent-Length: %d\r\n\r\n%s",
+                    filename, fileContent.length(), fileContent);
+
+            out.write(request.getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("201") || statusLine.contains("200"));
+        }
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write(("DELETE /files/" + filename + " HTTP/1.1\r\nHost: localhost\r\n\r\n").getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("200"));
+        }
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write(("DELETE /files/" + filename + " HTTP/1.1\r\nHost: localhost\r\n\r\n").getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("404"));
+        }
+
+        try (Socket socket = new Socket("localhost", 1212)) {
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+
+            out.write(("GET /files/" + filename + " HTTP/1.1\r\nHost: localhost\r\n\r\n").getBytes());
+            out.flush();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String statusLine = reader.readLine();
+            assertNotNull(statusLine);
+            assertTrue(statusLine.contains("404"));
+        }
+    }
+
 }
